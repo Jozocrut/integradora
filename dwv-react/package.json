@@ -1,0 +1,45 @@
+{
+  "name": "dwv-react",
+  "version": "0.11.0-beta.0",
+  "description": "Medical viewer using DWV (DICOM Web Viewer) and React.",
+  "author": "ivmartel",
+  "license": "GPL-3.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "dwv": "0.35.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.3"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.2",
+    "@mui/material": "^7.3.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "canvas": "^3.2.0",
+    "jsdom": "^27.0.0",
+    "vite": "^7.1.7",
+    "vite-plugin-pwa": "^1.0.3",
+    "vitest": "^3.2.4"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build-trunk": "vite build --mode development --base /dwv-react/demo/trunk",
+    "build-stable": "vite build --mode production --base /dwv-react/demo/stable",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test-ci": "vitest run"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
