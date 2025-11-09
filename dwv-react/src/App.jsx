@@ -32,6 +32,13 @@ function App() {
   const [currentView, setCurrentView] = useState('list');
   const [studyToEdit, setStudyToEdit] = useState(null);
 
+  const [dwvKey, setDwvKey] = useState(0);
+
+  const forceDwvReload = () => {
+    setDwvKey(prevKey => prevKey + 1);
+    setCurrentView('viewer');
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -87,7 +94,6 @@ function App() {
   return (
     <div className="App" style={{ fontFamily: 'Arial, sans-serif', background: '#f4f7f9', minHeight: '100vh' }}>
 
-      {/* CABECERA Y NAVEGACIÓN (Diseño de la imagen) */}
       <nav style={{
         background: BG_LIGHT,
         padding: '0 20px',
@@ -153,9 +159,57 @@ function App() {
             onEditStudy={startEditing}
           />
         )}
-        {currentView === 'viewer' && <DwvComponent />}
-      </main>
-    </div>
+        {currentView === 'viewer' && (
+          <div
+            style={{
+              width: '70%',
+              margin: '0 auto',
+              padding: '10px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              background: 'white',
+              maxHeight: '80vh',
+            }}>
+
+            <button
+              onClick={forceDwvReload}
+              style={{
+                top: '80px',
+                right: '40px',
+                margin: '10px',
+                padding: '10px 10px',
+                background: PRIMARY_DARK,
+                color: ACCENT_COLOR,
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: '600',
+                cursor: 'pointer',
+              }}>
+              <img
+                src="/src/assets/iconReload.svg"
+                alt="Subir Archivo"
+                style={{
+                  verticalAlign: 'middle',
+                  marginRight: '5px',
+                  width: '20px',
+                  height: '20px',
+                  color: 'white',
+                  filter: 'invert(1)',
+                }}
+              />
+              Recargar Visor
+            </button>
+
+            <DwvComponent
+              key={dwvKey}
+              onComponentReload={forceDwvReload}
+            />
+          </div>
+
+        )}
+      </main >
+    </div >
   );
 }
 
