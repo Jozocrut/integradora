@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import LoginPage from './pages/LoginPage.jsx';
 import DwvComponent from './DwvComponent.jsx';
-import DicomUploaderPage from './pages/DicomUploaderPage';
+import DicomUploaderPage from './pages/DicomUploadForm.jsx';
 import DicomFormPage from './pages/DicomUpdateForm.jsx';
 import DicomStudiesList from './components/DicomStudiesList.jsx';
 
