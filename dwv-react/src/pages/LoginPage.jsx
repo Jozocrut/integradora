@@ -192,7 +192,7 @@ const LoginPage = ({ onLoginSuccess }) => {
                             required
                             disabled={loading}
                             style={styles.input}
-                            placeholder="doctor@hospital.com"
+                            placeholder="usuario@gmail.com"
                         />
                     </div>
 
@@ -206,7 +206,6 @@ const LoginPage = ({ onLoginSuccess }) => {
                             required
                             disabled={loading}
                             style={styles.input}
-                            placeholder="••••••••"
                         />
                     </div>
 
