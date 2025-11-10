@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from './supabaseClient';
+import LoginPage from './pages/LoginPage.jsx';
 import DwvComponent from './DwvComponent.jsx';
 import DicomUploaderPage from './pages/DicomUploaderPage';
 import DicomFormPage from './pages/DicomUpdateForm.jsx';
 import DicomStudiesList from './components/DicomStudiesList.jsx';
 
 function App() {
+  const [session, setSession] = useState(null); // NUEVO: Estado de la sesión de Supabase
+  const [loadingApp, setLoadingApp] = useState(true); // NUEVO: Para saber si la app está cargando la sesión
+
   const [currentView, setCurrentView] = useState('list');
   const [studyToEdit, setStudyToEdit] = useState(null);
 
-  React.useEffect(() => {
-    if (!currentView) {
-      setCurrentView('list');
-    }
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoadingApp(false);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setLoadingApp(false);
+      }
+    );
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
   }, []);
 
   const setView = (view) => {
@@ -22,7 +39,7 @@ function App() {
     }
   };
 
-  const handleSelectStudy = (url) => {
+  const handleSelectStudy = () => {
     setView('viewer');
   };
 
@@ -34,6 +51,19 @@ function App() {
     setStudyToEdit(null);
     setCurrentView('list');
   };
+  
+  const handleLogout = async () => {
+    console.log('Cerrando sesión...');
+    await supabase.auth.signOut();
+  };
+
+  if (loadingApp) {
+    return <p style={{ padding: '50px', textAlign: 'center' }}>Cargando aplicación...</p>;
+  }
+
+  if (!session) {
+    return <LoginPage onLoginSuccess={(newSession) => setSession(newSession)} />;
+  }
 
   return (
     <div className="App" style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -55,11 +85,15 @@ function App() {
           Visor DICOM
         </button>
 
+        <button onClick={() => handleLogout()} style={{ margin: '0 10px' }}>
+          Salir
+        </button>
+
       </nav>
 
       <main style={{ padding: '20px' }}>
-        {currentView === 'uploader' && 
-          <DicomUploaderPage 
+        {currentView === 'uploader' &&
+          <DicomUploaderPage
             setView={setView}
           />
         }
